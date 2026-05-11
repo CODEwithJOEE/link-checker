@@ -108,7 +108,8 @@ function App() {
             onClick={analyzeHtml}
             className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition shadow-lg active:scale-[0.98]"
           >
-            ANALYZE FOR {activeMode === "obi" ? "OBI LINKS" : "ALL LINKS"}
+            ANALYZE FOR{" "}
+            {activeMode === "obi" ? "OBI SERVICES LINKS" : "ALL LINKS"}
           </button>
         </section>
 
