@@ -141,7 +141,12 @@ function App() {
             </button>
           </div>
           <textarea
-            className={`w-full h-40 p-4 rounded-xl border-2 outline-none transition font-mono text-sm ${darkMode ? "bg-slate-900 border-slate-700 text-slate-300 focus:border-blue-500" : "bg-slate-50 border-slate-100 focus:border-blue-400"}`}
+            className={`w-full h-40 p-4 rounded-xl border-2 outline-none transition font-mono text-sm 
+    ${
+      darkMode
+        ? "bg-slate-900 border-slate-700 text-slate-300 focus:border-blue-500 placeholder:text-slate-500"
+        : "bg-slate-50 border-slate-100 focus:border-blue-400 placeholder:text-slate-400"
+    }`}
             placeholder="Paste Ctrl+U content here..."
             value={htmlInput}
             onChange={(e) => setHtmlInput(e.target.value)}
