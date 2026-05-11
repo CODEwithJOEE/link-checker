@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import logo from "./assets/obi-services.png";
 
 function App() {
   const [htmlInput, setHtmlInput] = useState("");
@@ -48,9 +49,13 @@ function App() {
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans pb-10">
       <header className="bg-white border-b border-slate-200 p-4 sticky top-0 z-20 shadow-sm">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <h1 className="font-black text-xl tracking-tighter text-blue-600">
-            LINK-CHECKER
-          </h1>
+          {/* Replaced H1 text with Image logo */}
+          <img
+            src={logo}
+            alt="OBI Link Checker Logo"
+            className="h-10 w-auto object-contain"
+          />
+
           <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
             <button
               onClick={() => setActiveMode("obi")}
