@@ -6,7 +6,7 @@ import {
 } from "react-icons/io5";
 
 import logoDark from "../assets/obi-services-dark-mode.png";
-import logoNormal from "../assets/obi-services-normal-mode.png";
+import logoNormal from "../assets/obi-services-default-mode.png";
 
 function Header({ darkMode, onToggleDarkMode, activeMode, onModeChange }) {
   return (
