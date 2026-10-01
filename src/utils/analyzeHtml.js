@@ -21,6 +21,11 @@ function normalizeHref(href) {
 }
 
 function isObiLink(href) {
+  // Skip hash-only at empty links (fix Issue #1)
+  if (!href || href === "#" || href.startsWith("#")) {
+    return false;
+  }
+
   try {
     const url = new URL(href, "https://obi.services");
 
@@ -42,7 +47,7 @@ export function analyzeHtml(htmlInput, options = {}) {
 
   if (!container) return [];
 
-  return Array.from(container.querySelectorAll("a"))
+  const links = Array.from(container.querySelectorAll("a"))
     .filter((anchor) => {
       if (scope === "all") return true;
 
@@ -64,4 +69,13 @@ export function analyzeHtml(htmlInput, options = {}) {
         isObi: isObiLink(href),
       };
     });
+
+  // Exact href dedup — same destination = 1 count
+  const seen = new Set();
+
+  return links.filter((link) => {
+    if (seen.has(link.href)) return false;
+    seen.add(link.href);
+    return true;
+  });
 }
