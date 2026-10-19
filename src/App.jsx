@@ -153,7 +153,11 @@ function App() {
         <section className="space-y-4">
           {activeMode === "headings" ? (
             headingResults ? (
-              <HeadingResults data={headingResults} darkMode={darkMode} />
+              <HeadingResults
+                data={headingResults}
+                darkMode={darkMode}
+                analyzedUrl={analyzedPage} // 👈 Ipasok ito
+              />
             ) : (
               <EmptyState activeMode={activeMode} darkMode={darkMode} />
             )

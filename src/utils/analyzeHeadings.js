@@ -4,8 +4,6 @@ export function analyzeHeadings(htmlInput, options = {}) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(htmlInput, "text/html");
 
-  // Kung gusto mong limitahan sa content area lang, pwede mong i-import ang findContentContainer
-  // Pero sa ngayon, kunin natin lahat ng headings sa page para makita ang buong picture.
   const headings = Array.from(
     doc.querySelectorAll("h1, h2, h3, h4, h5, h6"),
   ).map((el, index) => {
@@ -13,20 +11,23 @@ export function analyzeHeadings(htmlInput, options = {}) {
     const text = el.textContent?.trim() || "";
     const charCount = text.length;
 
-    let status = "success"; // success, warning, error
+    let status = "success";
     let issues = [];
+    let issueTypes = []; // 👈 Bagong array para i-track kung SEO o Accessibility
 
     if (!text) {
       status = "error";
       issues.push("Empty heading");
+      issueTypes.push("seo"); // Walang text = SEO issue
     } else {
-      // Length checks (SEO Best Practices)
       if (level === 1 && (charCount < 20 || charCount > 70)) {
         status = "warning";
         issues.push(charCount > 70 ? "Too long" : "Too short");
+        issueTypes.push("seo"); // Masyadong mahaba/maikli ang H1 = SEO issue
       } else if (level > 1 && (charCount < 10 || charCount > 70)) {
         status = "warning";
         issues.push(charCount > 70 ? "Too long" : "Too short");
+        issueTypes.push("seo");
       }
     }
 
@@ -37,18 +38,18 @@ export function analyzeHeadings(htmlInput, options = {}) {
       charCount,
       status,
       issues,
+      issueTypes, // 👈 Isama sa return object
     };
   });
 
   // Check for Multiple H1s
   const h1Count = headings.filter((h) => h.level === 1).length;
-  if (h1Count === 0) {
-    // Pwede mong i-flag ang buong result array, pero dito natin i-append bilang meta data
-  } else if (h1Count > 1) {
+  if (h1Count > 1) {
     headings.forEach((h) => {
       if (h.level === 1) {
         h.status = "error";
         h.issues.push("Multiple H1 tags found");
+        h.issueTypes.push("seo");
       }
     });
   }
@@ -61,15 +62,30 @@ export function analyzeHeadings(htmlInput, options = {}) {
       heading.issues.push(
         `Skipped from H${previousLevel} to H${heading.level}`,
       );
+      heading.issueTypes.push("accessibility"); // Skip sa hierarchy = Accessibility issue
     }
     previousLevel = heading.level;
   }
+
+  const levelCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+  let seoIssues = 0;
+  let accessibilityIssues = 0;
+
+  headings.forEach((h) => {
+    levelCounts[h.level]++;
+    // Bilangin base sa issueTypes
+    if (h.issueTypes.includes("seo")) seoIssues++;
+    if (h.issueTypes.includes("accessibility")) accessibilityIssues++;
+  });
 
   return {
     headings,
     meta: {
       h1Count,
       totalHeadings: headings.length,
+      levelCounts,
+      seoIssues,
+      accessibilityIssues,
     },
   };
 }
