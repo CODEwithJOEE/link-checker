@@ -58,15 +58,21 @@ function HeadingItem({ heading, index, darkMode }) {
         )}
       </td>
 
-      {/* Status Column */}
+      {/* Status Column - 👇 INayos natin ang kulay dito 👇 */}
       <td className="py-3 px-4">
         <div
           className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase ${
             heading.status === "success"
-              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+              ? darkMode
+                ? "bg-emerald-900/40 text-emerald-400 border border-emerald-800"
+                : "bg-emerald-100 text-emerald-700 border border-emerald-200"
               : heading.status === "warning"
-                ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
-                : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                ? darkMode
+                  ? "bg-amber-900/40 text-amber-400 border border-amber-800"
+                  : "bg-amber-100 text-amber-700 border border-amber-200"
+                : darkMode
+                  ? "bg-red-900/40 text-red-400 border border-red-800"
+                  : "bg-red-100 text-red-700 border border-red-200"
           }`}
         >
           {heading.status === "success" && (

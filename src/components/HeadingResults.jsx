@@ -134,7 +134,14 @@ function HeadingResults({ data, darkMode, analyzedUrl }) {
           darkMode ? "border-slate-700" : "border-slate-200"
         }`}
       >
-        <div className="bg-[#5c63d3] text-white p-3 text-sm font-bold">
+        {/* 👇 Binago natin ang background ng header para maging consistent sa ibang section 👇 */}
+        <div
+          className={`p-3 text-sm font-bold ${
+            darkMode
+              ? "bg-slate-800 text-slate-200"
+              : "bg-slate-50 text-slate-800"
+          }`}
+        >
           Heading Structure
         </div>
 
