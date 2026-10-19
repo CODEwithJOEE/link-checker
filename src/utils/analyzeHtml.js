@@ -21,24 +21,8 @@ function normalizeHref(href) {
 }
 
 function isObiLink(href) {
-  // Skip hash-only at empty links
-  if (!href || href === "#" || href.startsWith("#")) {
-    return false;
-  }
-
-  // Dismiss relative URLs at links na walang http(s) scheme
-  if (
-    href.startsWith("/") ||
-    href.startsWith("./") ||
-    href.startsWith("../") ||
-    !/^https?:\/\//i.test(href)
-  ) {
-    return false;
-  }
-
   try {
-    const url = new URL(href); // Walang fallback base
-
+    const url = new URL(href);
     return (
       url.hostname === "obi.services" || url.hostname.endsWith(".obi.services")
     );
