@@ -3,6 +3,7 @@ import {
   IoMoonOutline,
   IoLocateOutline,
   IoGlobeOutline,
+  IoDocumentTextOutline,
 } from "react-icons/io5";
 
 import logoDark from "../assets/obi-services-dark-mode.png";
@@ -72,6 +73,19 @@ function Header({ darkMode, onToggleDarkMode, activeMode, onModeChange }) {
           >
             <IoGlobeOutline size={16} />
             GLOBAL ANALYZER
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onModeChange("headings")}
+            className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all ${
+              activeMode === "headings"
+                ? "bg-blue-600 text-white shadow-md"
+                : "text-slate-500 hover:text-slate-700"
+            }`}
+          >
+            <IoDocumentTextOutline size={16} />
+            HEADER TAGS
           </button>
         </div>
       </div>

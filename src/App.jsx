@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Header from "./components/Header";
 import HtmlInput from "./components/HtmlInput";
@@ -10,6 +10,8 @@ import useDarkMode from "./hooks/useDarkMode";
 import { analyzeHtml } from "./utils/analyzeHtml";
 import { fetchPageHtml } from "./utils/fetchPageHtml";
 import { filterLinks } from "./utils/linkFilters";
+import { analyzeHeadings } from "./utils/analyzeHeadings";
+import HeadingResults from "./components/HeadingResults";
 
 function App() {
   const [urlInput, setUrlInput] = useState("");
@@ -21,16 +23,31 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [analyzedPage, setAnalyzedPage] = useState("");
+  const [headingResults, setHeadingResults] = useState(null);
 
   const { darkMode, toggleDarkMode } = useDarkMode();
 
-  function runLinkAnalysis(html) {
-    const results = analyzeHtml(html, {
-      scope: linkScope,
-    });
+  useEffect(() => {
+    // Kung may laman ang htmlInput, i-re-run ang analysis kapag nagpalit ng tab
+    if (htmlInput.trim()) {
+      runAnalysis(htmlInput);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeMode]);
 
-    setLinks(results);
-    setSearchTerm("");
+  // ONE shared function for analysis
+  function runAnalysis(html) {
+    if (activeMode === "headings") {
+      const headingData = analyzeHeadings(html, { scope: linkScope });
+      setHeadingResults(headingData);
+      setLinks([]);
+      setSearchTerm("");
+    } else {
+      const results = analyzeHtml(html, { scope: linkScope });
+      setLinks(results);
+      setHeadingResults(null);
+      setSearchTerm("");
+    }
   }
 
   function handleAnalyzeHtml() {
@@ -41,7 +58,7 @@ function App() {
 
     setError("");
     setAnalyzedPage("Manually pasted HTML");
-    runLinkAnalysis(htmlInput);
+    runAnalysis(htmlInput);
   }
 
   async function handleAnalyzeUrl() {
@@ -56,13 +73,14 @@ function App() {
     setError("");
     setLinks([]);
     setSearchTerm("");
+    setHeadingResults(null);
 
     try {
       const { html, finalUrl } = await fetchPageHtml(url);
 
       setHtmlInput(html);
       setAnalyzedPage(finalUrl || url);
-      runLinkAnalysis(html);
+      runAnalysis(html);
     } catch (fetchError) {
       setError(fetchError.message || "The article could not be analyzed.");
     } finally {
@@ -77,6 +95,7 @@ function App() {
     setSearchTerm("");
     setError("");
     setAnalyzedPage("");
+    setHeadingResults(null);
   }
 
   const filteredLinks = useMemo(
@@ -118,7 +137,7 @@ function App() {
           error={error}
         />
 
-        {analyzedPage && links.length > 0 && (
+        {analyzedPage && (links.length > 0 || headingResults) && (
           <div
             className={`mb-4 rounded-xl border p-3 text-xs ${
               darkMode
@@ -132,7 +151,13 @@ function App() {
         )}
 
         <section className="space-y-4">
-          {links.length > 0 ? (
+          {activeMode === "headings" ? (
+            headingResults ? (
+              <HeadingResults data={headingResults} darkMode={darkMode} />
+            ) : (
+              <EmptyState activeMode={activeMode} darkMode={darkMode} />
+            )
+          ) : links.length > 0 ? (
             <>
               <LinkSearch
                 value={searchTerm}

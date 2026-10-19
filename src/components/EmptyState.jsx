@@ -14,7 +14,9 @@ function EmptyState({ activeMode, darkMode }) {
       <p className="text-sm font-medium">
         {activeMode === "obi"
           ? "Paste HTML to find OBI backlinks..."
-          : "Paste HTML for a full link audit..."}
+          : activeMode === "global"
+            ? "Paste HTML for a full link audit..."
+            : "Paste HTML to analyze header tags (H1-H6)..."}
       </p>
     </div>
   );
