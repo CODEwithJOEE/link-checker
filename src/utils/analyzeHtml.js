@@ -41,10 +41,9 @@ export function analyzeHtml(htmlInput, options = {}) {
 
   if (!container) return [];
 
-  const links = Array.from(container.querySelectorAll("a"))
+  const rawLinks = Array.from(container.querySelectorAll("a"))
     .filter((anchor) => {
       if (scope === "all") return true;
-
       return !isExcludedLink(anchor);
     })
     .map((anchor, index) => {
@@ -64,12 +63,19 @@ export function analyzeHtml(htmlInput, options = {}) {
       };
     });
 
-  // Exact href dedup — same destination = 1 count
-  const seen = new Set();
+  // I-group ang magkakaparehong href at bilangin kung ilang beses lumabas
+  const linkMap = new Map();
 
-  return links.filter((link) => {
-    if (seen.has(link.href)) return false;
-    seen.add(link.href);
-    return true;
-  });
+  for (const link of rawLinks) {
+    if (linkMap.has(link.href)) {
+      // Kung existing na, dagdagan lang ang count
+      linkMap.get(link.href).occurrences += 1;
+    } else {
+      // Kung bago, i-save kasama ang unang occurrence count = 1
+      linkMap.set(link.href, { ...link, occurrences: 1 });
+    }
+  }
+
+  // I-convert pabalik sa Array para sa UI
+  return Array.from(linkMap.values());
 }
