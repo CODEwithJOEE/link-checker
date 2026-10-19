@@ -32,7 +32,7 @@ function LinkItem({ link, darkMode }) {
                 ? "border-purple-500/30 bg-purple-500/20 text-purple-400"
                 : "border-purple-200 bg-purple-50 text-purple-600"
             }`}
-            title={`Lumabas ng ${link.occurrences} beses sa page`}
+            title={`Link ${link.occurrences} times on page`}
           >
             x{link.occurrences}
           </div>
