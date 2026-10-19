@@ -4,7 +4,9 @@ import HeadingItem from "./HeadingItem";
 function StatCard({ label, value, darkMode }) {
   return (
     <div
-      className={`flex flex-col items-center justify-center p-4 rounded-xl border shadow-sm ${darkMode ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200"}`}
+      className={`flex flex-col items-center justify-center p-4 rounded-xl border shadow-sm ${
+        darkMode ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200"
+      }`}
     >
       <span className="text-3xl font-black text-blue-500 mb-1">{value}</span>
       <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 text-center">
@@ -41,14 +43,19 @@ function HeadingResults({ data, darkMode, analyzedUrl }) {
         />
       </div>
 
-      {/* 2. URL INFO SECTION (Optional kung gusto mong isama) */}
+      {/* 2. URL INFO SECTION */}
       {analyzedUrl && (
-        <div className="rounded-xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-700">
-          <div className="bg-[#5c63d3] text-white p-3 text-sm font-bold">
+        <div
+          className={`rounded-xl overflow-hidden shadow-sm border ${darkMode ? "border-slate-700" : "border-slate-200"}`}
+        >
+          {/* Binago natin ang kulay ng header nito para maging mas subtle */}
+          <div
+            className={`p-3 text-sm font-bold ${darkMode ? "bg-slate-800 text-slate-200" : "bg-slate-50 text-slate-800"}`}
+          >
             URL Information
           </div>
           <div
-            className={`p-5 text-sm space-y-3 ${darkMode ? "bg-slate-800 text-slate-300" : "bg-white text-slate-700"}`}
+            className={`p-5 text-sm space-y-3 ${darkMode ? "bg-slate-900 text-slate-300" : "bg-white text-slate-700"}`}
           >
             <p>
               <span className="font-bold">Analyzed URL:</span>{" "}
@@ -65,23 +72,39 @@ function HeadingResults({ data, darkMode, analyzedUrl }) {
       )}
 
       {/* 3. HEADING STATISTICS BREAKDOWN */}
-      <div className="rounded-xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-700">
-        <div className="bg-[#5c63d3] text-white p-3 text-sm font-bold">
+      <div
+        className={`rounded-xl overflow-hidden shadow-sm border ${darkMode ? "border-slate-700" : "border-slate-200"}`}
+      >
+        {/* Binago natin ang kulay ng header nito */}
+        <div
+          className={`p-3 text-sm font-bold ${darkMode ? "bg-slate-800 text-slate-200" : "bg-slate-50 text-slate-800"}`}
+        >
           Heading Statistics
         </div>
         <div
-          className={`p-5 grid grid-cols-3 sm:grid-cols-6 gap-3 ${darkMode ? "bg-slate-800" : "bg-white"}`}
+          className={`p-5 grid grid-cols-3 sm:grid-cols-6 gap-3 ${darkMode ? "bg-slate-900" : "bg-white"}`}
         >
           {[1, 2, 3, 4, 5, 6].map((level) => (
             <div
               key={level}
-              className={`flex flex-col items-center p-3 rounded-lg border ${darkMode ? "border-slate-700 bg-slate-900/50" : "border-slate-100 bg-slate-50"}`}
+              className={`flex flex-col items-center p-3 rounded-lg border ${
+                darkMode
+                  ? "border-slate-700 bg-slate-800"
+                  : "border-slate-200 bg-slate-50"
+              }`}
             >
               <span className="text-[10px] font-bold text-blue-500 mb-1">
                 H{level}:
               </span>
+              {/* 👇 INayos natin ang text color logic dito 👇 */}
               <span
-                className={`text-xl font-bold ${meta.levelCounts[level] > 0 ? "text-slate-800 dark:text-slate-100" : "text-slate-400"}`}
+                className={`text-xl font-bold ${
+                  meta.levelCounts[level] > 0
+                    ? darkMode
+                      ? "text-slate-100"
+                      : "text-slate-800"
+                    : "text-slate-400 dark:text-slate-500"
+                }`}
               >
                 {meta.levelCounts[level]}
               </span>
@@ -92,15 +115,25 @@ function HeadingResults({ data, darkMode, analyzedUrl }) {
 
       {/* 4. DETAILED LIST (Yung dating listahan natin) */}
       <div
-        className={`overflow-hidden rounded-2xl border shadow-sm ${darkMode ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-white"}`}
+        className={`overflow-hidden rounded-2xl border shadow-sm ${
+          darkMode
+            ? "border-slate-700 bg-slate-800"
+            : "border-slate-200 bg-white"
+        }`}
       >
         <div
-          className={`flex justify-between p-3 text-[10px] font-bold uppercase tracking-widest border-b ${darkMode ? "border-slate-700 bg-slate-900/50 text-slate-400" : "border-slate-200 bg-slate-50 text-slate-500"}`}
+          className={`flex justify-between p-3 text-[10px] font-bold uppercase tracking-widest border-b ${
+            darkMode
+              ? "border-slate-700 bg-slate-900/50 text-slate-400"
+              : "border-slate-200 bg-slate-50 text-slate-500"
+          }`}
         >
           <span>Detailed Headings List</span>
         </div>
         <div
-          className={`divide-y ${darkMode ? "divide-slate-700" : "divide-slate-100"}`}
+          className={`divide-y ${
+            darkMode ? "divide-slate-700" : "divide-slate-100"
+          }`}
         >
           {headings.map((heading) => (
             <HeadingItem
